@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0d12">
+<title>台新Richart卡 vs 玉山Unicard 回饋通路比較搜尋</title>
+<style>
+  /* 主動採用深色主題，避免行動瀏覽器的自動反轉深色模式造成局部元件對比度異常 */
+  html{ color-scheme: dark; }
+
+  :root{
+    --richart:#fb5b74;
+    --richart-soft:rgba(251,91,116,0.14);
+    --richart-line:rgba(251,91,116,0.4);
+
+    --unicard:#5b9dff;
+    --unicard-soft:rgba(91,157,255,0.14);
+    --unicard-line:rgba(91,157,255,0.4);
+
+    --bg:#0b0d12;
+    --bg-header:#05060a;
+    --surface:#151923;
+    --surface-2:#1d222e;
+    --surface-3:#272d3c;
+    --border:#2a3040;
+    --border-strong:#3a4257;
+
+    --ink:#f3f5f9;
+    --ink-soft:#b6bcca;
+    --ink-faint:#7d8497;
+
+    --gold-bg:#4a3a12;
+    --gold-ink:#ffcf5c;
+    --cap-ink:#ffb454;
+
+    --radius-lg:16px;
+    --radius-md:12px;
+    --radius-sm:8px;
+    --shadow-sm:0 1px 2px rgba(0,0,0,0.35);
+    --shadow-md:0 6px 20px rgba(0,0,0,0.45);
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ background:var(--bg); }
+  body{
+    margin:0;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Microsoft JhengHei",sans-serif;
+    color:var(--ink);
+    line-height:1.55;
+    -webkit-text-size-adjust:100%;
+  }
+
+  header{
+    background:linear-gradient(160deg,var(--bg-header) 0%, #10131c 60%, #171c29 100%);
+    border-bottom:1px solid var(--border);
+    color:var(--ink);
+    padding:34px 20px 26px;
+    text-align:center;
+  }
+  header h1{
+    margin:0 0 8px;
+    font-size:1.45rem;
+    font-weight:800;
+    letter-spacing:0.2px;
+    color:#ffffff;
+  }
+  header p{
+    margin:0;
+    color:var(--ink-soft);
+    font-size:0.88rem;
+  }
+  .updated{
+    display:inline-block;
+    margin-top:12px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    padding:5px 13px;
+    border-radius:999px;
+    font-size:0.74rem;
+    color:var(--ink-soft);
+    letter-spacing:0.2px;
+  }
+
+  .container{
+    max-width:1000px;
+    margin:0 auto;
+    padding:18px 16px 60px;
+  }
+
+  /* ---------- 搜尋區 ---------- */
+  .search-wrap{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:var(--bg);
+    padding:14px 0 12px;
+  }
+  .search-box{
+    position:relative;
+    background:var(--surface);
+    border:1.5px solid var(--border);
+    border-radius:var(--radius-lg);
+    box-shadow:var(--shadow-sm);
+    transition:border-color .15s, box-shadow .15s;
+  }
+  .search-box:focus-within{
+    border-color:var(--unicard);
+    box-shadow:0 0 0 4px rgba(91,157,255,0.15);
+  }
+  .search-box input{
+    width:100%;
+    border:none;
+    outline:none;
+    padding:15px 46px 15px 18px;
+    font-size:1rem;
+    border-radius:var(--radius-lg);
+    background:transparent;
+    color:var(--ink);
+  }
+  .search-box input::placeholder{ color:var(--ink-faint); }
+  .search-box .clear-btn{
+    position:absolute;
+    right:10px;
+    top:50%;
+    transform:translateY(-50%);
+    border:none;
+    background:var(--surface-3);
+    color:var(--ink-soft);
+    width:26px;
+    height:26px;
+    border-radius:50%;
+    cursor:pointer;
+    font-size:13px;
+    display:none;
+    align-items:center;
+    justify-content:center;
+  }
+  .quick-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+    margin-top:11px;
+  }
+  .quick-tag{
+    font-size:0.78rem;
+    background:var(--surface);
+    border:1px solid var(--border);
+    padding:6px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    white-space:nowrap;
+    transition:background .12s, border-color .12s, color .12s;
+  }
+  .quick-tag:hover{
+    background:var(--surface-3);
+    border-color:var(--border-strong);
+    color:var(--ink);
+  }
+
+  .summary-line{
+    margin:16px 2px 4px;
+    font-size:0.85rem;
+    color:var(--ink-soft);
+  }
+  .summary-line strong{ color:var(--ink); }
+
+  .best-badge{
+    display:inline-block;
+    background:var(--gold-bg);
+    color:var(--gold-ink);
+    font-size:0.68rem;
+    font-weight:700;
+    padding:3px 8px;
+    border-radius:999px;
+    margin-left:6px;
+    white-space:nowrap;
+    vertical-align:middle;
+  }
+
+  /* ---------- 結果卡片 ---------- */
+  .results{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    margin-top:10px;
+  }
+  .result-card{
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    padding:15px 17px;
+    box-shadow:var(--shadow-sm);
+    border:1px solid var(--border);
+    border-left:4px solid var(--border-strong);
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .result-card.richart{ border-left-color:var(--richart); }
+  .result-card.unicard{ border-left-color:var(--unicard); }
+
+  .result-row-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .plan-tag{
+    font-size:0.76rem;
+    font-weight:700;
+    padding:3px 10px;
+    border-radius:999px;
+    border:1px solid transparent;
+  }
+  .plan-tag.richart{ background:var(--richart-soft); color:var(--richart); border-color:var(--richart-line); }
+  .plan-tag.unicard{ background:var(--unicard-soft); color:var(--unicard); border-color:var(--unicard-line); }
+
+  .card-badge{
+    font-size:0.74rem;
+    font-weight:700;
+    color:var(--ink-faint);
+    display:flex;
+    align-items:center;
+    gap:5px;
+  }
+  .card-badge .dot{ width:7px; height:7px; border-radius:50%; }
+  .card-badge.richart .dot{ background:var(--richart); }
+  .card-badge.unicard .dot{ background:var(--unicard); }
+
+  .result-row-main{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    flex-wrap:wrap;
+  }
+  .rate-num{
+    font-size:1.35rem;
+    font-weight:800;
+    color:#ffffff;
+    letter-spacing:0.2px;
+    white-space:nowrap;
+  }
+  .store-name{
+    font-size:1rem;
+    font-weight:700;
+    color:var(--ink);
+  }
+  .meta-line{
+    font-size:0.82rem;
+    color:var(--ink-faint);
+  }
+  .cap-line{
+    font-size:0.8rem;
+    color:var(--cap-ink);
+    font-weight:600;
+  }
+  mark{
+    background:#5b4a12;
+    color:#ffe08a;
+    padding:0 2px;
+    border-radius:3px;
+  }
+  .empty-state{
+    text-align:center;
+    padding:56px 20px;
+    color:var(--ink-faint);
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    border:1px dashed var(--border-strong);
+  }
+  .empty-state .emoji{ font-size:2.2rem; margin-bottom:10px; }
+
+  /* ---------- 瀏覽模式 ---------- */
+  .browse-section{ margin-top:8px; }
+
+  .card-header{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:22px 0 12px;
+  }
+  .card-header .dot{
+    width:11px; height:11px; border-radius:50%;
+    flex-shrink:0;
+  }
+  .card-header.richart .dot{ background:var(--richart); }
+  .card-header.unicard .dot{ background:var(--unicard); }
+  .card-header h2{
+    font-size:1.1rem;
+    margin:0;
+    font-weight:800;
+    color:#ffffff;
+  }
+
+  .plan-block{
+    background:var(--surface);
+    border-radius:var(--radius-lg);
+    padding:16px 18px;
+    margin-bottom:12px;
+    box-shadow:var(--shadow-sm);
+    border:1px solid var(--border);
+    border-top:3px solid var(--border-strong);
+  }
+  .plan-block.richart{ border-top-color:var(--richart); }
+  .plan-block.unicard{ border-top-color:var(--unicard); }
+
+  .plan-block-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:6px;
+  }
+  .plan-block-head .name{
+    font-weight:700;
+    font-size:1rem;
+    color:#ffffff;
+  }
+  .plan-block-head .rate{
+    font-weight:800;
+    font-size:1.08rem;
+    color:#ffffff;
+  }
+  .plan-block .cap{
+    font-size:0.8rem;
+    color:var(--cap-ink);
+    margin-bottom:10px;
+    font-weight:500;
+  }
+  .merchant-tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+  }
+  .merchant-tag{
+    font-size:0.78rem;
+    background:var(--surface-2);
+    color:var(--ink-soft);
+    border:1px solid var(--border);
+    padding:5px 10px;
+    border-radius:var(--radius-sm);
+  }
+
+  footer{
+    text-align:center;
+    color:var(--ink-faint);
+    font-size:0.76rem;
+    padding:28px 16px 40px;
+    line-height:1.7;
+  }
+
+  /* ---------- 分頁切換 ---------- */
+  .tabs{
+    display:flex;
+    gap:6px;
+    margin:22px 0 16px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    padding:5px;
+    border-radius:var(--radius-md);
+  }
+  .tab-btn{
+    flex:1;
+    padding:11px;
+    text-align:center;
+    border-radius:9px;
+    border:none;
+    background:transparent;
+    cursor:pointer;
+    font-size:0.9rem;
+    font-weight:700;
+    color:var(--ink-faint);
+    transition:background .15s, color .15s, box-shadow .15s;
+  }
+  .tab-btn:hover{ color:var(--ink); }
+  .tab-btn.active.richart{
+    background:var(--richart);
+    color:#1a0006;
+    box-shadow:var(--shadow-sm);
+  }
+  .tab-btn.active.unicard{
+    background:var(--unicard);
+    color:#04122b;
+    box-shadow:var(--shadow-sm);
+  }
+
+  .hidden{ display:none !important; }
+
+  .note-box{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-left:4px solid var(--ink-faint);
+    border-radius:var(--radius-md);
+    padding:13px 15px;
+    font-size:0.83rem;
+    color:var(--ink-soft);
+    margin-top:4px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>💳 台新 Richart卡 vs 玉山 Unicard</h1>
+  <p>回饋方案・通路總整理，輸入店家名稱立即比較兩張卡回饋高低</p>
+  <span class="updated">資料整理至 2026年9月・以銀行最新公告為準</span>
+</header>
+
+<div class="container">
+
+  <div class="search-wrap">
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="輸入店家或通路名稱，例如：遠東、蝦皮、日本、機票..." autocomplete="off">
+      <button class="clear-btn" id="clearBtn">✕</button>
+    </div>
+    <div class="quick-tags" id="quickTags"></div>
+  </div>
+
+  <div id="searchResultsWrap" class="hidden">
+    <div class="summary-line" id="summaryLine"></div>
+    <div class="results" id="results"></div>
+  </div>
+
+  <div id="browseWrap">
+    <div class="note-box">
+      💡 使用上方搜尋框可依「店家/通路」快速比對兩張卡回饋高低（同時列出台新與玉山的結果）；往下捲動可瀏覽各卡完整方案與通路清單。
+    </div>
+
+    <div class="tabs">
+      <div class="tab-btn active richart" data-tab="richart">台新 Richart卡</div>
+      <div class="tab-btn unicard" data-tab="unicard">玉山 Unicard</div>
+    </div>
+
+    <div id="richartBrowse" class="browse-section"></div>
+    <div id="unicardBrowse" class="browse-section hidden"></div>
+  </div>
+
+</div>
+
+<footer>
+  資料來源：台新銀行官網、玉山銀行官網及公開整理文章（beurlife.com、money101.com.tw 等），實際回饋率、通路與上限請以銀行最新公告為準。<br>
+  本頁面僅供個人比較參考，非任何形式之投資理財建議。
+</footer>
+
+<script>
+/* ============ 資料區：台新 Richart卡 ============ */
+const richartPlans = [
+  {
+    plan:"Pay著刷",
+    rate:"3.8%",
+    rateNum:3.8,
+    cap:"無上限",
+    note:"限台新Pay／台灣Pay(TWQR被掃)／海外台新Pay+",
+    merchants:["新光三越","四大超商(7-11/全家/萊爾富/OK)","IKEA","路易莎咖啡","台灣大車隊","神腦","燦坤","全國電子","麥當勞","美廉社","大樹藥局","杏一醫療","韓國GS25","韓國emart24","韓國DAISO"]
+  },
+  {
+    plan:"Pay著刷(LINE Pay)",
+    rate:"2.3%(領券可疊加至3.8%)",
+    rateNum:3.8,
+    cap:"領券加碼上限500點/月",
+    note:"限LINE Pay綁定支付；四大超商與繳費不適用",
+    merchants:["LINE Pay全通路(不含四大超商/繳費)"]
+  },
+  {
+    plan:"天天刷",
+    rate:"3.3%",
+    rateNum:3.3,
+    cap:"無上限",
+    note:"限實體卡/線上輸入卡號/AP/GP/SP，7-11全家限台新Pay且單筆≤3000",
+    merchants:["7-11","全家","家樂福","大買家","唐吉軻德","LOPIA","台鐵","高鐵","台灣大車隊","Yoxi","Uber(限台灣)","LINEGO","台灣Bolt","台灣中油直營","台亞直營","全國加油","源點EVOASIS","華城電能EVALUE","全國特急電","USPACE停車","Autopass車麻吉"]
+  },
+  {
+    plan:"大筆刷",
+    rate:"3.3%",
+    rateNum:3.3,
+    cap:"無上限",
+    note:"百貨獨立店中店(如無印良品)不適用",
+    merchants:["新光三越","遠東SOGO","廣三SOGO","遠東百貨","遠東巨城","微風百貨","台北101","南紡購物中心","漢神百貨","漢神巨蛋","誠品生活","京站","三創生活","夢時代","統一時代百貨","中友百貨","三井OUTLET林口","三井OUTLET台中港","三井OUTLET台南","華泰名品城","SKM Park Outlets","LaLaport南港","LaLaport台中","IKEA","特力屋","HOLA","宜得利","瑪黑家居","Uniqlo","GU","ZARA","NET","lululemon"]
+  },
+  {
+    plan:"好饗刷",
+    rate:"3.3%",
+    rateNum:3.3,
+    cap:"無上限",
+    note:"全台餐飲(不含餐券)，含王品瘋Pay",
+    merchants:["全台餐飲","王品瘋Pay","Uber Eats","foodpanda","拓元售票","KKTIX","年代售票","寬宏售票","兩廳院OPENTIX","FunNow","晶華酒店集團","台灣萬豪","煙波觀光集團","福華集團","漢來飯店","台北君悅酒店","高雄洲際酒店","礁溪寒沐酒店","雲朗觀光","老爺酒店集團","台中勤美洲際酒店","錢櫃KTV","好樂迪","ONCOR","sing!go","享溫馨"]
+  },
+  {
+    plan:"數趣刷",
+    rate:"3.3%",
+    rateNum:3.3,
+    cap:"無上限",
+    note:"蝦皮不含海外直送/貴金屬/遊戲點數/票券；PChome不含儲值/電子票券",
+    merchants:["蝦皮","momo","酷澎Coupang","PChome","Amazon","東森","博客來","Richart Mart","淘寶","PayEasy","iHerb","SHEIN","Farfetch","Olive Young","Hahow","PressPlay","AmazingTalker","知識衛星","TutorABC","MyCard","遊戲橘子","Steam","PlayStation","Nintendo","Netflix","Disney+","ChatGPT","Notion","Canva","Perplexity","Claude"]
+  },
+  {
+    plan:"玩旅刷",
+    rate:"3.3%",
+    rateNum:3.3,
+    cap:"無上限",
+    note:"含海外實體/線上消費，含歐盟當地刷卡",
+    merchants:["海外實體消費","海外線上消費","Uber(海外)","Grab","Suica","ICOCA","PASMO","WOWPASS","AIRSIM","中華航空","長榮航空","星宇航空","台灣虎航","國泰航空","華信航空","立榮航空","樂桃航空","阿聯酋航空","亞洲航空AirAsia","酷航","捷星航空","新加坡航空","日本航空","越捷航空","Klook","KKday","Agoda","Booking.com","Trip.com","Airbnb","Hotels.com","Expedia","雄獅旅遊","易遊網","東南旅遊","可樂旅遊","長汎假期","五福旅遊","喜鴻假期","易飛旅遊","燦星旅遊","加利利旅行社","鳳凰國際旅行社","山富旅遊"]
+  },
+  {
+    plan:"假日刷",
+    rate:"2%",
+    rateNum:2,
+    cap:"無上限",
+    note:"僅六日/國定假日；不含悠遊付/icash Pay/街口支付",
+    merchants:["六日及國定假日不限通路一般消費"]
+  },
+  {
+    plan:"Chill刷(限時至2026/9/30)",
+    rate:"最高10%",
+    rateNum:10,
+    cap:"無上限",
+    note:"含LINE Pay支付；依通路分5%~10%不等，詳見官網",
+    merchants:["詹記麻辣火鍋","海底撈","屋馬燒肉","茶六燒肉堂","新村站著吃","燒肉政宗","碳佐麻里","貳樓","樂子The Diner","臺虎精釀","50嵐","得正","八曜和茶","五桐號","龜記","UG TEA","叮哥茶飲","CAFE!N","%Arabica","COMPOSE COFFEE","饗饗INPARADISE","NAGOMI","WEVERSE","巴哈姆特","BOOK WALKER","Netflix(Chill刷)","Disney+(Chill刷)","Apple Store","DJI","GoPro","好好生醫","MYPROTEIN","Anytime Fitness","健身工廠","World Gym","Adidas","New Balance","Nike","HOKA","lululemon(Chill刷)"]
+  },
+  {
+    plan:"保費(不需切換)",
+    rate:"1.3%",
+    rateNum:1.3,
+    cap:"無上限",
+    note:"限自動扣繳或線上輸入卡號繳保費，不需切換權益",
+    merchants:["保險費自動扣繳/線上繳費"]
+  }
+];
+
+/* ============ 資料區：玉山 Unicard ============ */
+// Unicard 是「百大通路」共用清單，同一店家依方案不同可拿 3% / 3.5% / 4.5%
+const unicardPlans = [
+  { key:"simple", name:"簡單選", rate:3.0, cap:"1,000點/月（消費約5萬元封頂）", note:"預設方案，百大通路直接加碼2%（1%基礎+2%加碼）" },
+  { key:"any", name:"任意選", rate:3.5, cap:"1,000點/月（消費約4萬元封頂）", note:"百大中自選8家享加碼2.5%，其餘92家僅基礎1%" },
+  { key:"up", name:"UP選", rate:4.5, cap:"5,000點/月（消費約14.28萬元封頂）", note:"需訂閱149點e point，或達成「上月消費≥3萬+平均資產≥30萬」，加碼3.5%" }
+];
+const unicardCategories = [
+  { cat:"行動支付", merchants:["LINE Pay","街口支付","悠遊付","全盈+Pay","全支付","玉山Wallet電子支付","一卡通iPass Money","icash Pay","支付寶"] },
+  { cat:"交通加油", merchants:["台灣中油直營(含中油Pay)","台灣大車隊","台鐵","高鐵","UBER(限台灣)","台塑石油PAY"] },
+  { cat:"國內百貨", merchants:["新光三越","遠東百貨","遠東SOGO百貨","遠東巨城","漢神百貨","微風百貨","台北101","華泰名品城","三井OUTLET","誠品生活","秀泰生活","LaLaport","統一時代百貨","昇恆昌","Big City遠東巨城","Global Mall環球購物中心"] },
+  { cat:"餐飲美食", merchants:["Uber Eats","foodpanda","王品瘋美食"] },
+  { cat:"旅遊航空", merchants:["中華航空","長榮航空","日本航空","台灣虎航","樂桃航空","酷航","Trip.com","booking.com","Hotels.com","Expedia","KKday","Klook","雄獅旅遊","可樂旅遊","東南旅行社","Agoda","五福旅遊","加利利旅行社","找到了旅行社","喜鴻假期","鳳凰旅遊"] },
+  { cat:"精選商家", merchants:["Apple直營店","小米台灣(不含購物平台官方店)","全國電子","燦坤","拓元售票","威秀影城","國賓影城","新光影城","錢櫃KTV"] },
+  { cat:"生活採買", merchants:["家樂福","屈臣氏","特力屋","HOLA","ho!好好生活","UNIQLO(限街邊店)","NET(限街邊店)","康是美","杏一藥局","卡多摩"] },
+  { cat:"電商平台", merchants:["momo購物網","蝦皮購物(不含跨境)","淘寶網","Coupang酷澎"] },
+  { cat:"國外實體消費(限實體,不含線上)", merchants:["日本","韓國","泰國","越南","新加坡","中國","香港","澳門","美國","英國","法國","德國","義大利","馬來西亞","菲律賓","加拿大","澳洲","紐西蘭"] },
+  { cat:"ESG消費", merchants:["玉山Wallet愛心捐款","特斯拉Tesla"] }
+];
+const unicardRateText = "3% / 3.5% / 4.5%";
+const unicardNoteText = "簡單選3%／任意選3.5%／UP選4.5%（任意選需自選8家、UP選需訂閱149點或達資產+消費門檻）";
+const unicardCap = "簡單選、任意選上限1,000點/月；UP選上限5,000點/月";
+
+/* ============ 建立扁平化搜尋資料（同一店家在同一張卡只出現一列，方便直接比較） ============ */
+const flatRows = [];
+
+// 台新 Richart：一個通路可能同時出現在不同方案（例如新光三越同時在 Pay著刷 與 大筆刷），皆保留為個別列
+richartPlans.forEach(p=>{
+  p.merchants.forEach(m=>{
+    flatRows.push({
+      card:"richart",
+      cardName:"台新 Richart卡",
+      plan:p.plan,
+      rateDisplay:p.rate,
+      rateNum:p.rateNum,
+      cap:p.cap,
+      note:p.note,
+      store:m
+    });
+  });
+});
+
+// 玉山 Unicard：同一店家在同一分類下，三種方案合併成一列顯示（3% / 3.5% / 4.5%）
+unicardCategories.forEach(c=>{
+  c.merchants.forEach(m=>{
+    flatRows.push({
+      card:"unicard",
+      cardName:"玉山 Unicard",
+      plan:c.cat,
+      rateDisplay:unicardRateText,
+      rateNum:3.5, // 以「任意選」3.5%作為預設比較基準（免額外訂閱即可達成）
+      cap:unicardCap,
+      note:unicardNoteText,
+      store:m
+    });
+  });
+});
+
+/* ============ 搜尋功能 ============ */
+const searchInput = document.getElementById('searchInput');
+const clearBtn = document.getElementById('clearBtn');
+const resultsDiv = document.getElementById('results');
+const summaryLine = document.getElementById('summaryLine');
+const searchResultsWrap = document.getElementById('searchResultsWrap');
+const browseWrap = document.getElementById('browseWrap');
+
+function highlight(text, q){
+  if(!q) return text;
+  const idx = text.toLowerCase().indexOf(q.toLowerCase());
+  if(idx === -1) return text;
+  return text.slice(0,idx) + "<mark>" + text.slice(idx, idx+q.length) + "</mark>" + text.slice(idx+q.length);
+}
+
+function renderResults(query){
+  const q = query.trim();
+  if(!q){
+    searchResultsWrap.classList.add('hidden');
+    browseWrap.classList.remove('hidden');
+    return;
+  }
+  browseWrap.classList.add('hidden');
+  searchResultsWrap.classList.remove('hidden');
+
+  // 同時比對台新與玉山所有方案／通路
+  const matches = flatRows.filter(r => r.store.toLowerCase().includes(q.toLowerCase()));
+
+  // 去除完全重複列
+  const seen = new Set();
+  const unique = [];
+  matches.forEach(r=>{
+    const key = r.card+r.plan+r.store+r.rateDisplay;
+    if(!seen.has(key)){ seen.add(key); unique.push(r); }
+  });
+
+  // 依回饋率高到低排序（台新為固定值；玉山以任意選3.5%為比較基準）
+  unique.sort((a,b)=> b.rateNum - a.rateNum);
+
+  if(unique.length === 0){
+    summaryLine.innerHTML = `找不到符合「${q}」的通路，換個關鍵字試試？`;
+    resultsDiv.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div>沒有找到符合的通路<br>可以試試「LINE Pay」「日本」「機票」「蝦皮」等關鍵字</div>`;
+    return;
+  }
+
+  summaryLine.innerHTML = `找到 <strong>${unique.length}</strong> 筆符合「${q}」的回饋通路，已同時列出台新與玉山結果，依回饋率高到低排序：`;
+
+  resultsDiv.innerHTML = unique.map((r,i)=>{
+    const isBest = i===0;
+    return `
+    <div class="result-card ${r.card}">
+      <div class="result-row-top">
+        <span class="plan-tag ${r.card}">${r.plan}</span>
+        <span class="card-badge ${r.card}"><span class="dot"></span>${r.cardName}</span>
+      </div>
+      <div class="result-row-main">
+        <span class="rate-num">${r.rateDisplay}</span>
+        <span class="store-name">${highlight(r.store,q)}</span>
+        ${isBest ? '<span class="best-badge">🏆 回饋較優</span>' : ''}
+      </div>
+      <div class="cap-line">回饋上限：${r.cap}</div>
+      <div class="meta-line">${r.note}</div>
+    </div>`;
+  }).join("");
+}
+
+searchInput.addEventListener('input', (e)=>{
+  clearBtn.style.display = e.target.value ? 'flex' : 'none';
+  renderResults(e.target.value);
+});
+clearBtn.addEventListener('click', ()=>{
+  searchInput.value = '';
+  clearBtn.style.display = 'none';
+  renderResults('');
+  searchInput.focus();
+});
+
+// 快速標籤
+const quickTagList = ["遠東","LINE Pay","蝦皮","全家","日本","機票","家樂福","Uber Eats","百貨","街口支付"];
+document.getElementById('quickTags').innerHTML = quickTagList.map(t=>`<span class="quick-tag" data-q="${t}">${t}</span>`).join("");
+document.querySelectorAll('.quick-tag').forEach(tag=>{
+  tag.addEventListener('click', ()=>{
+    searchInput.value = tag.getAttribute('data-q');
+    clearBtn.style.display = 'flex';
+    renderResults(searchInput.value);
+    window.scrollTo({top:0,behavior:'smooth'});
+  });
+});
+
+/* ============ 瀏覽模式（無搜尋時） ============ */
+function renderRichartBrowse(){
+  const el = document.getElementById('richartBrowse');
+  let html = `<div class="card-header richart"><span class="dot"></span><h2>台新 Richart卡（7+1大刷）</h2></div>`;
+  html += `<div class="meta-line" style="margin-bottom:10px;">每日僅能啟用一種方案，以當天最後切換結果適用全天消費；回饋為台新Point，1點=1元。</div>`;
+  richartPlans.forEach(p=>{
+    html += `
+    <div class="plan-block richart">
+      <div class="plan-block-head">
+        <span class="name">${p.plan}</span>
+        <span class="rate">${p.rate}</span>
+      </div>
+      <div class="cap">回饋上限：${p.cap}｜${p.note}</div>
+      <div class="merchant-tags">${p.merchants.map(m=>`<span class="merchant-tag">${m}</span>`).join("")}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+function renderUnicardBrowse(){
+  const el = document.getElementById('unicardBrowse');
+  let html = `<div class="card-header unicard"><span class="dot"></span><h2>玉山 Unicard（百大通路）</h2></div>`;
+  html += `<div class="meta-line" style="margin-bottom:10px;">以每月最後一天所選方案計算整月回饋；回饋為玉山e point，1點=1元，效期1年。</div>`;
+
+  html += `<div class="plan-block unicard">
+    <div class="plan-block-head"><span class="name">三種方案比較</span></div>
+    <div class="merchant-tags">
+      ${unicardPlans.map(p=>`<span class="merchant-tag">${p.name}：<strong>${p.rate}%</strong>（上限${p.cap}）</span>`).join("")}
+    </div>
+    <div class="meta-line" style="margin-top:8px;">基礎回饋：電子帳單+玉山帳戶自動扣繳成功＝1%無上限；僅電子帳單＝0.3%</div>
+  </div>`;
+
+  unicardCategories.forEach(c=>{
+    html += `
+    <div class="plan-block unicard">
+      <div class="plan-block-head">
+        <span class="name">${c.cat}</span>
+        <span class="rate">簡單選3% / 任意選3.5% / UP選4.5%</span>
+      </div>
+      <div class="merchant-tags">${c.merchants.map(m=>`<span class="merchant-tag">${m}</span>`).join("")}</div>
+    </div>`;
+  });
+  el.innerHTML = html;
+}
+
+renderRichartBrowse();
+renderUnicardBrowse();
+
+// 分頁切換
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const tab = btn.getAttribute('data-tab');
+    document.getElementById('richartBrowse').classList.toggle('hidden', tab!=='richart');
+    document.getElementById('unicardBrowse').classList.toggle('hidden', tab!=='unicard');
+  });
+});
+</script>
+
+</body>
+</html>
