@@ -415,7 +415,7 @@
 
   <div class="search-wrap">
     <div class="search-box">
-      <input id="searchInput" type="text" placeholder="輸入店家或通路名稱，例如：遠東、蝦皮、日本、機票..." autocomplete="off">
+      <input id="searchInput" type="text" placeholder="輸入店家或通路名稱，例如：遠東、蝦皮、日本、旅遊..." autocomplete="off">
       <button class="clear-btn" id="clearBtn">✕</button>
     </div>
     <div class="quick-tags" id="quickTags"></div>
@@ -631,7 +631,7 @@ function renderResults(query){
 
   if(unique.length === 0){
     summaryLine.innerHTML = `找不到符合「${q}」的通路，換個關鍵字試試？`;
-    resultsDiv.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div>沒有找到符合的通路<br>可以試試「LINE Pay」「日本」「機票」「蝦皮」等關鍵字</div>`;
+    resultsDiv.innerHTML = `<div class="empty-state"><div class="emoji">🔍</div>沒有找到符合的通路<br>可以試試「LINE Pay」「日本」「旅遊」「蝦皮」等關鍵字</div>`;
     return;
   }
 
@@ -668,7 +668,7 @@ clearBtn.addEventListener('click', ()=>{
 });
 
 // 快速標籤
-const quickTagList = ["遠東","LINE Pay","蝦皮","全家","日本","機票","家樂福","Uber Eats","百貨","街口支付"];
+const quickTagList = ["Uber Eats","Foodpanda","遠東","LINE Pay","蝦皮","全家","日本","旅遊","百貨","航空"];
 document.getElementById('quickTags').innerHTML = quickTagList.map(t=>`<span class="quick-tag" data-q="${t}">${t}</span>`).join("");
 document.querySelectorAll('.quick-tag').forEach(tag=>{
   tag.addEventListener('click', ()=>{
