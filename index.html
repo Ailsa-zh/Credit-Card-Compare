@@ -551,7 +551,7 @@ const unicardCategories = [
   { cat:"國外實體消費(限實體,不含線上)", merchants:["日本","韓國","泰國","越南","新加坡","中國","香港","澳門","美國","英國","法國","德國","義大利","馬來西亞","菲律賓","加拿大","澳洲","紐西蘭"] },
   { cat:"ESG消費", merchants:["玉山Wallet愛心捐款","特斯拉Tesla"] }
 ];
-const unicardRateText = "3% / 3.5% / 4.5%";
+const unicardRateText = "4.5%"; // 只顯示最高回饋率，三方案細節已寫在 unicardNoteText 小字說明中
 const unicardNoteText = "簡單選3%／任意選3.5%／UP選4.5%（任意選需自選8家、UP選需訂閱149點或達資產+消費門檻）";
 const unicardCap = "簡單選、任意選上限1,000點/月；UP選上限5,000點/月";
 
@@ -646,8 +646,8 @@ function renderResults(query){
         <span class="card-badge ${r.card}"><span class="dot"></span>${r.cardName}</span>
       </div>
       <div class="result-row-main">
-        <span class="rate-num">${r.rateDisplay}</span>
         <span class="store-name">${highlight(r.store,q)}</span>
+        <span class="rate-num">${r.rateDisplay}</span>
         ${isBest ? '<span class="best-badge">🏆 回饋較優</span>' : ''}
       </div>
       <div class="cap-line">回饋上限：${r.cap}</div>
@@ -668,7 +668,7 @@ clearBtn.addEventListener('click', ()=>{
 });
 
 // 快速標籤
-const quickTagList = ["Uber Eats","Foodpanda","遠東","LINE Pay","蝦皮","全家","日本","旅遊","百貨","航空"];
+const quickTagList = ["Uber Eats","Foodpanda","遠東","LINE Pay","momo",,"蝦皮","全家","7-11","日本","旅遊","百貨","航空","屈臣氏","康是美"];
 document.getElementById('quickTags').innerHTML = quickTagList.map(t=>`<span class="quick-tag" data-q="${t}">${t}</span>`).join("");
 document.querySelectorAll('.quick-tag').forEach(tag=>{
   tag.addEventListener('click', ()=>{
